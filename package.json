@@ -1,0 +1,19 @@
+{
+  "name": "dude",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "deploy": "now -e TWITTER_CONSUMER_SECRET=@twitter-secret -e TWITTER_ACCESS_TOKEN_SECRET=@twitter-access -e BOT_TOKEN=@bot -e LUIS_SUBSCRIPTION_KEY=@luis" 
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "request": "^2.79.0",
+    "telegraf": "^3.6.5",
+    "twitter": "^1.7.0"
+  }
+}

@@ -1,0 +1,3 @@
+.dotfiles
+node_modules
+*.log
