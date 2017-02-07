@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
+    "debug": "source .dotfiles/.tokens && node --debug-brk index",
     "deploy": "now -e TWITTER_CONSUMER_SECRET=@twitter-secret -e TWITTER_ACCESS_TOKEN_SECRET=@twitter-access -e BOT_TOKEN=@bot -e LUIS_SUBSCRIPTION_KEY=@luis" 
   },
   "keywords": [],
