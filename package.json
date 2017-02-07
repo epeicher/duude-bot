@@ -6,13 +6,14 @@
   "scripts": {
     "start": "node index",
     "debug": "source .dotfiles/.tokens && node --debug-brk index",
-    "deploy": "now -e TWITTER_CONSUMER_SECRET=@twitter-secret -e TWITTER_ACCESS_TOKEN_SECRET=@twitter-access -e BOT_TOKEN=@bot -e LUIS_SUBSCRIPTION_KEY=@luis" 
+    "deploy": "now -e TWITTER_CONSUMER_SECRET=@twitter-secret -e TWITTER_ACCESS_TOKEN_SECRET=@twitter-access -e BOT_TOKEN=@bot -e LUIS_SUBSCRIPTION_KEY=@luis"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.4",
+    "node-schedule": "^1.2.0",
     "request": "^2.79.0",
     "telegraf": "^3.6.5",
     "twitter": "^1.7.0"
