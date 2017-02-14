@@ -12,6 +12,7 @@ const app = new Telegraf(BOT_TOKEN)
 const telegram = new Telegram(BOT_TOKEN)
 
 const CHAT_ID = -197428130;
+const DATE_STARTED = new Date()
 
 app.command('start', (ctx) => {
   console.log('start', ctx.from)
@@ -51,6 +52,7 @@ app.on('message', (ctx) => {
         }
         else {
           ctx.reply('No se que quieres decir con ' + resp.query)
+          ctx.reply(`La fecha de inicio de este bot fue ${DATE_STARTED}`)
         }
       }
       catch(e) {
