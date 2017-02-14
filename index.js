@@ -26,13 +26,16 @@ var j = schedule.scheduleJob('* 12 * * *', function(){
       let today_tweets = t.join("\n")
       telegram.sendMessage(CHAT_ID, 'Ahi os mando el menu...')
       telegram.sendMessage(CHAT_ID, today_tweets)
+      console.log('trying to clear the interval')
       clearTweetsInterval()
     }
   }),60000)
 });
 
 function clearTweetsInterval() {
+  console.log(`Clearing the interval ${intervalId}`)
   clearInterval(intervalId)
+  console.log(`Interval ${intervalId} cleared`)
 }
 
 app.on('message', (ctx) => {
