@@ -19,7 +19,7 @@ app.command('start', (ctx) => {
   ctx.reply('Welcome!')
 })
 
-var j = schedule.scheduleJob('* 12 * * *', function(){
+var j = schedule.scheduleJob('0 12 * * *', function(){
   console.log('se produce el job')
   let intervalId = setInterval(() => getTodayTweets().then(t => {
     if(t && t.length > 0) {
