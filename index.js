@@ -41,7 +41,7 @@ var j = schedule.scheduleJob('0 12 * * 1-5', function() {
           telegram.sendMessage(CHAT_ID, 'He mandado el siguiente menu\n',menuList)
           state = MODE_ANSWER
         }, 5*60*1000)
-      },30*60*1000)
+      },40*60*1000)
     }
   }),60000)
 });
