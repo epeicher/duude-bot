@@ -76,7 +76,7 @@ app.on('message', (ctx) => {
         }      
       }
       else {
-        console.log('There seems to be an error', error);
+        console.log('Hay un error contactando con LUIS', error, 'El response code es', response.statusCode);
       }
     })
   } else if (state === MODE_STORE) {
