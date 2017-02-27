@@ -43,7 +43,7 @@ var j = schedule.scheduleJob('0 12 * * 1-5', function() {
         }, 5*60*1000)
       },40*60*1000)
     }
-  }),60000)
+  }).catch(e => console.log('error',e)),60000)
 });
 
 app.on('message', (ctx) => {
@@ -73,7 +73,7 @@ app.on('message', (ctx) => {
         }      
       }
     })
-  } else if (state === MODEL_STORE) {
+  } else if (state === MODE_STORE) {
     menuList[ctx.from] = ctx.update.message.text;
   }
 

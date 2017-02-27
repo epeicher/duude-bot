@@ -18,6 +18,7 @@ function getTodayTweets() {
     return new Promise((resolve, reject) => {
         client.get('statuses/user_timeline', params, function (error, tweets, response) {
             if (error) {
+				console.log(error);
                 reject("Error getting tweets "+error);
             } else {
                 let todayTweets = filter(tweets, t => new Date(t.created_at) > (new Date).setHours(0, 0, 0, 0));
