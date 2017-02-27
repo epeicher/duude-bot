@@ -52,6 +52,9 @@ app.on('message', (ctx) => {
   const encoded_msg = encodeURIComponent(msg)  
   let ask_luis_url = luis_url + encoded_msg
 
+  console.log('Received the message', msg);
+  console.log('The state is', state);  
+
   if(state === MODE_ANSWER) {
     request(ask_luis_url, (error, response, body) => {
       if (!error && response.statusCode == 200) {
@@ -71,6 +74,9 @@ app.on('message', (ctx) => {
           console.error(e)
           ctx.reply('Ha habido un error...' + e)
         }      
+      }
+      else {
+        console.log('There seems to be an error', error);
       }
     })
   } else if (state === MODE_STORE) {
