@@ -49,36 +49,41 @@ var j = schedule.scheduleJob('0 12 * * 1-5', function() {
 app.on('message', (ctx) => {
 
   const msg = ctx.update.message.text  
-  const encoded_msg = encodeURIComponent(msg)  
-  let ask_luis_url = luis_url + encoded_msg
+  // const encoded_msg = encodeURIComponent(msg)  
+  // let ask_luis_url = luis_url + encoded_msg
 
   console.log('Received the message', msg);
   console.log('The state is', state);  
 
   if(state === MODE_ANSWER) {
-    request(ask_luis_url, (error, response, body) => {
-      if (!error && response.statusCode == 200) {
-        try {
-          const resp = JSON.parse(body);
-          if(resp.topScoringIntent.intent === 'GetTheMenu') {
-            ctx.reply('Ahora te mando el menu...')
-            getTodayTweets()
-              .then(t => ctx.reply((t && t.length > 0) ? t.join("\n") : "Todavia no han publicado"))
-          }
-          else {
-            ctx.reply('No se que quieres decir con ' + resp.query)
-            ctx.reply(`La fecha de inicio de este bot fue ${DATE_STARTED}`)
-          }
-        }
-        catch(e) {
-          console.error(e)
-          ctx.reply('Ha habido un error...' + e)
-        }      
-      }
-      else {
-        console.log('Hay un error contactando con LUIS', error, 'El response code es', response.statusCode);
-      }
-    })
+
+    getTodayTweets().
+      then(t => ctx.reply((t && t.length > 0) ? t.join("\n") : "Todavia no han publicado")).
+      catch(e => console.log('Error recuperando los tweets', e))
+
+    // request(ask_luis_url, (error, response, body) => {
+    //   if (!error && response.statusCode == 200) {
+    //     try {
+    //       const resp = JSON.parse(body);
+    //       if(resp.topScoringIntent.intent === 'GetTheMenu') {
+    //         ctx.reply('Ahora te mando el menu...')
+    //         getTodayTweets()
+    //           .then(t => ctx.reply((t && t.length > 0) ? t.join("\n") : "Todavia no han publicado"))
+    //       }
+    //       else {
+    //         ctx.reply('No se que quieres decir con ' + resp.query)
+    //         ctx.reply(`La fecha de inicio de este bot fue ${DATE_STARTED}`)
+    //       }
+    //     }
+    //     catch(e) {
+    //       console.error(e)
+    //       ctx.reply('Ha habido un error...' + e)
+    //     }      
+    //   }
+    //   else {
+    //     console.log('Hay un error contactando con LUIS', error, 'El response code es', response.statusCode);
+    //   }
+    // })
   } else if (state === MODE_STORE) {
     menuList[ctx.from] = ctx.update.message.text;
   }
