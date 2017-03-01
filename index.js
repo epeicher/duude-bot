@@ -22,7 +22,7 @@ app.command('start', (ctx) => {
 })
 
 let state = MODE_ANSWER
-let menuList;
+let menuList = {};
 
 var j = schedule.scheduleJob('0 12 * * 1-5', function() {
   console.log('se produce el job')
@@ -85,7 +85,8 @@ app.on('message', (ctx) => {
     //   }
     // })
   } else if (state === MODE_STORE) {
-    menuList[ctx.from] = ctx.update.message.text;
+    menuList[ctx.from.first_name] = ctx.update.message.text;
+	  ctx.reply('Menu updated to ' + JSON.stringify(menuList));
   }
 
 })
