@@ -29,9 +29,7 @@ var j = schedule.scheduleJob('0 12 * * 1-5', function() {
   let intervalId = setInterval(() => getTodayTweets().then(t => {
     if(t && t.length > 0) {
       let today_tweets = t.join("\n")
-      telegram.sendMessage(CHAT_ID, 'Ahi os mando el menu...')
-      telegram.sendMessage(CHAT_ID, today_tweets)      
-      telegram.sendMessage(CHAT_ID, 'Enga chaval@s, id diciendo que quereis')
+      telegram.sendMessage(CHAT_ID, 'Ahi os mando el menu...\n' + today_tweets + '\nEnga chaval@s, id diciendo que quereis')      
       state = MODE_STORE
       menuList = {}
       clearInterval(intervalId)
