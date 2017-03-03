@@ -3,6 +3,7 @@ const { Telegram } = require('telegraf')
 var request = require('request')
 var getTodayTweets = require('./twitterService')
 var schedule = require('node-schedule')
+var util = require('util')
 
 const BOT_TOKEN = process.env.BOT_TOKEN
 const LUIS_SUBSCRIPTION_KEY = process.env.LUIS_SUBSCRIPTION_KEY
@@ -29,20 +30,26 @@ var j = schedule.scheduleJob('0 12 * * 1-5', function() {
   let intervalId = setInterval(() => getTodayTweets().then(t => {
     if(t && t.length > 0) {
       let today_tweets = t.join("\n")
-      telegram.sendMessage(CHAT_ID, 'Ahi os mando el menu...\n' + today_tweets + '\nEnga chaval@s, id diciendo que quereis')      
+      telegram.sendMessage(CHAT_ID, 'Ahi os mando el menu...\n\n' + today_tweets + '\n\nEnga chaval@s, id diciendo que quereis')
       state = MODE_STORE
       menuList = {}
       clearInterval(intervalId)
       setTimeout(function(){
         telegram.sendMessage(CHAT_ID, 'En 5 minutos mando el menu ar Dani')        
         setTimeout(function(){
-          telegram.sendMessage(CHAT_ID, 'He mandado el siguiente menu\n',menuList)
+          telegram.sendMessage(CHAT_ID, 'He mandado el siguiente menu\n',formatMenu(menuList))
           state = MODE_ANSWER
         }, 5*60*1000)
       },40*60*1000)
     }
   }).catch(e => console.log('error',e)),60000)
 });
+
+function formatMenu(raw) {
+  let menu = '';
+  Object.keys(raw).forEach(function(e) { menu += util.format("[%s]: '%s'%s",e,raw[e],'\n')})
+  return menu;
+}
 
 app.on('message', (ctx) => {
 
@@ -84,7 +91,7 @@ app.on('message', (ctx) => {
     // })
   } else if (state === MODE_STORE) {
     menuList[ctx.from.first_name] = ctx.update.message.text;
-	  ctx.reply('Menu updated to ' + JSON.stringify(menuList));
+	  ctx.reply('Menu actualizado a \n' + formatMenu(menuList));
   }
 
 })
