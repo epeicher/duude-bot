@@ -37,7 +37,7 @@ var j = schedule.scheduleJob('0 12 * * 1-5', function() {
       setTimeout(function(){
         telegram.sendMessage(CHAT_ID, 'En 5 minutos mando el menu ar Dani')        
         setTimeout(function(){
-          telegram.sendMessage(CHAT_ID, 'He mandado el siguiente menu\n',formatMenu(menuList))
+          telegram.sendMessage(CHAT_ID, 'He mandado el siguiente menu\n' + formatMenu(menuList))
           state = MODE_ANSWER
         }, 5*60*1000)
       },40*60*1000)
