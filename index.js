@@ -1,5 +1,5 @@
 const Telegraf = require('telegraf')
-const { Telegram } = require('telegraf')
+const { Telegram, Extra, Markup } = require('telegraf')
 var request = require('request')
 var getTodayTweets = require('./twitterService')
 var schedule = require('node-schedule')
@@ -25,12 +25,12 @@ app.command('start', (ctx) => {
 let state = MODE_ANSWER
 let menuList = {};
 
-var j = schedule.scheduleJob('0 12 * * 1-5', function() {
+schedule.scheduleJob('0 11 * * 1-5', function() {
   console.log('se produce el job')
   let intervalId = setInterval(() => getTodayTweets().then(t => {
     if(t && t.length > 0) {
       let today_tweets = t.join("\n")
-      telegram.sendMessage(CHAT_ID, 'Ahi os mando el menu...\n\n' + today_tweets + '\n\nEnga chaval@s, id diciendo que quereis')
+      telegram.sendMessage(CHAT_ID, 'Ahi os mando el menu...\n\n' + today_tweets + '\n\nElige mesa: ', getKeyboard())
       state = MODE_STORE
       menuList = {}
       clearInterval(intervalId)
@@ -45,17 +45,27 @@ var j = schedule.scheduleJob('0 12 * * 1-5', function() {
   }).catch(e => console.log('error',e)),60000)
 });
 
+function formatRow(row) {
+  console.log(JSON.stringify(row))
+  return JSON.stringify(row)
+}
+
 function formatMenu(raw) {
   let menu = '';
-  Object.keys(raw).forEach(function(e) { menu += util.format("[%s]: '%s'%s",e,raw[e],'\n')})
+  Object.keys(raw).forEach(function(e) { menu += util.format("[%s]: '%s'%s",e,formatRow(raw[e]),'\n')})
   return menu;
 }
+
+app.action(/.+/, (ctx) => {
+  const user = ctx.update.callback_query.from.first_name
+  menuList[ctx.from.first_name] = Object.assign(menuList[ctx.from.first_name] || {}, {mesa:ctx.match[0]})
+	ctx.reply('Menu actualizado a \n' + formatMenu(menuList));
+  return ctx.answerCallbackQuery(`El amigo ${user} ha pulsado ${ctx.match || ctx.match[0]}`)
+})
 
 app.on('message', (ctx) => {
 
   const msg = ctx.update.message.text  
-  // const encoded_msg = encodeURIComponent(msg)  
-  // let ask_luis_url = luis_url + encoded_msg
 
   console.log('Received the message', msg);
   console.log('The state is', state);  
@@ -66,34 +76,24 @@ app.on('message', (ctx) => {
       then(t => ctx.reply((t && t.length > 0) ? t.join("\n") : "Todavia no han publicado")).
       catch(e => console.log('Error recuperando los tweets', e))
 
-    // request(ask_luis_url, (error, response, body) => {
-    //   if (!error && response.statusCode == 200) {
-    //     try {
-    //       const resp = JSON.parse(body);
-    //       if(resp.topScoringIntent.intent === 'GetTheMenu') {
-    //         ctx.reply('Ahora te mando el menu...')
-    //         getTodayTweets()
-    //           .then(t => ctx.reply((t && t.length > 0) ? t.join("\n") : "Todavia no han publicado"))
-    //       }
-    //       else {
-    //         ctx.reply('No se que quieres decir con ' + resp.query)
-    //         ctx.reply(`La fecha de inicio de este bot fue ${DATE_STARTED}`)
-    //       }
-    //     }
-    //     catch(e) {
-    //       console.error(e)
-    //       ctx.reply('Ha habido un error...' + e)
-    //     }      
-    //   }
-    //   else {
-    //     console.log('Hay un error contactando con LUIS', error, 'El response code es', response.statusCode);
-    //   }
-    // })
   } else if (state === MODE_STORE) {
-    menuList[ctx.from.first_name] = ctx.update.message.text;
-	  ctx.reply('Menu actualizado a \n' + formatMenu(menuList));
-  }
 
+    const user = ctx.from.first_name
+    menuList[user] = Object.assign(menuList[user] || {},{menu: msg})
+    ctx.reply('Menu actualizado a \n' + formatMenu(menuList));
+
+    return ctx.reply('Elige mesa: ', getKeyboard())
+  }
 })
+
+function getKeyboard() {
+  return Extra.HTML().markup((m) =>
+      m.inlineKeyboard([
+        m.callbackButton('Mesa 1', 'Mesa 1'),
+        m.callbackButton('Mesa 2', 'Mesa 2'),
+        m.callbackButton('Mesa 3', 'Mesa 3'),
+        m.callbackButton('Mesa 4', 'Mesa 4')
+    ]))
+}
 
 app.startPolling()

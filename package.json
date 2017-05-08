@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
+    "nodemon": "nodemon index",
     "debug": "source .dotfiles/.tokens && node --debug-brk index",
     "deploy": "now -e TWITTER_CONSUMER_SECRET=@twitter-secret -e TWITTER_ACCESS_TOKEN_SECRET=@twitter-access -e BOT_TOKEN=@bot -e LUIS_SUBSCRIPTION_KEY=@luis"
   },
@@ -17,5 +18,8 @@
     "request": "^2.79.0",
     "telegraf": "^3.6.5",
     "twitter": "^1.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
