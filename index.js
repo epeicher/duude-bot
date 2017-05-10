@@ -37,7 +37,7 @@ schedule.scheduleJob('0 11 * * 1-5', function() {
       setTimeout(function(){
         telegram.sendMessage(CHAT_ID, 'En 5 minutos mando el menu ar Dani')        
         setTimeout(function(){
-          telegram.sendMessage(CHAT_ID, formatMenu(menuList), 'HTML')
+          telegram.sendMessage(CHAT_ID, formatMenu(menuList), {parse_mode: 'HTML'})
           state = MODE_ANSWER
         }, 5*60*1000)
       },40*60*1000)
@@ -106,9 +106,9 @@ function getKeyboard() {
   function getInnerKeyboard(m) {
     let keyboard = []
     if(isFree('Mesa 1')) keyboard.push(m.callbackButton('Mesa 1', 'Mesa 1'))
-    if(isFree('Mesa 1')) keyboard.push(m.callbackButton('Mesa 2', 'Mesa 2'))
-    if(isFree('Mesa 1')) keyboard.push(m.callbackButton('Mesa 3', 'Mesa 3'))
-    if(isFree('Mesa 1')) keyboard.push(m.callbackButton('Mesa 4', 'Mesa 4'))
+    if(isFree('Mesa 2')) keyboard.push(m.callbackButton('Mesa 2', 'Mesa 2'))
+    if(isFree('Mesa 3')) keyboard.push(m.callbackButton('Mesa 3', 'Mesa 3'))
+    if(isFree('Mesa 4')) keyboard.push(m.callbackButton('Mesa 4', 'Mesa 4'))
     return keyboard;
   }
   return Extra.HTML().markup(m => m.inlineKeyboard(getInnerKeyboard(m)))
